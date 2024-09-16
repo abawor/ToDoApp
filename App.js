@@ -23,6 +23,15 @@ export default function App() {
     Keyboard.dismiss()
     setTaskItems([...taskItems, task])
     setTask('')
+    console.log(taskItems)
+  }
+
+  const deleteTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1)
+    setTaskItems(itemsCopy)
+    console.log(itemsCopy)
+
   }
 
   return (
@@ -35,7 +44,11 @@ export default function App() {
           {/* This is where the tasks will go */}
           {
             taskItems.map((item, index) => {
-              return <Task key={index} text={item} />
+              return (
+                <Pressable key={index} onPress={() => deleteTask(index)}>
+                  <Task text={item} />
+                </Pressable>
+              )            
             })
           }
         </View>
