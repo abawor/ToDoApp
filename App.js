@@ -1,5 +1,8 @@
 import "@expo/metro-runtime";
-import React from "react";
+import
+  React,
+  {useState}
+from "react";
 import {
   StyleSheet,
   Text,
@@ -7,11 +10,21 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Platform,
-  Pressable
+  Pressable,
+  Keyboard
 } from 'react-native';
 import Task from './components/Task';
 
 export default function App() {
+  const [task, setTask] = useState();
+  const [taskItems, setTaskItems] = useState([]);
+
+  const handleAddTask = () => {
+    Keyboard.dismiss()
+    setTaskItems([...taskItems, task])
+    setTask('')
+  }
+
   return (
     <View style={styles.container}>
       {/* Today's Tasks */}
@@ -19,9 +32,12 @@ export default function App() {
         <Text style={styles.sectionTitle}>Today's tasks</Text>
 
         <View style={styles.items}>
-          {/* This is where the tasks will go! */}
-          <Task text={'Task 1'}/>
-          <Task text={'Task 2'}/>
+          {/* This is where the tasks will go */}
+          {
+            taskItems.map((item, index) => {
+              return <Task key={index} text={item} />
+            })
+          }
         </View>
       </View>
 
@@ -30,10 +46,10 @@ export default function App() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.writeTaskWrapper}
       >
-        <TextInput style={styles.input} placeholder={'Write a task'} />
-        <Pressable>
+        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
+        <Pressable onPress={() => handleAddTask()}>
           <View style={styles.addWrapper}>
-            <Text stlye={styles.addText}></Text>
+            <Text stlye={styles.addText}>+</Text>
           </View>
         </Pressable>
       </KeyboardAvoidingView>
